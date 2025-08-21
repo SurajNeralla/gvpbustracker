@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <style>
+        body{
+            padding:30px;
+            background:linear-gradient(to right, #e2e0e0, #c9d6ff);
+           
+        }
+        h1{
+            text-align:center;
+            color: rgb(7, 7, 139);
+
+        }
+        h2{
+            text-align: center;
+            color: rgb(227, 10, 39);
+        }
+        h3{
+            text-align: center;
+            color: rgb(26, 25, 24);
+
+        }
+        button{
+            color:rgb(173, 11, 46);
+            background-color:#c9d6ff;
+            padding:5px;
+            border-radius:5px;
+            font-size:1rem;
+            font-weight:bold;
+            border:none;
+        }
+        button:hover{
+            text-decoration: underline;
+            color:blue;
+        }
+        button, div{
+            margin-left:15%;
+            font-size:20px;
+            padding:10px;
+        }
+        div{
+            font-weight:400;
+            color:rgb(10, 5, 103);
+
+        }
+        span{
+            font-weight:600;
+            font-size:22px;
+            color:rgb(18, 7, 106);
+        }
+     
+  
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #e6e0e0;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .bus-stop-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 30px 0;
+    }
+
+    .bus-stop {
+      background-color: #e1e9e3;
+      padding: 10px;
+      border: 1px solid #fefbfb;
+      border-radius: 5px;
+      width: 180px;
+      text-align: center;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto;
+      padding: 20px 30px;
+      background-color: rgb(15, 231, 15);
+      color: rgb(251, 254, 252);
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: rgb(195, 204, 195);
+    }
+  
+   
+   
+
+    </style>
+    <script type="module" src="./homepage.js"></script>
+</head>
+<body>
+    <div style="display: flex; flex-direction: row; justify-content: center;"> 
+            <img src="gvplogo.png" style="width: 200px; height: 200px; margin-right: 4px; margin-top: 5px;background: none;mix-blend-mode: multiply;"/>
+            <div style="display: flex; flex-direction: column;">
+                <h1 style="font-family:Roboto; font-size: 32px; color: #1f3f7a; margin: 0px; font-weight: bold;text-align: left;">GAYATRI VIDYA PARISHAD COLLEGE FOR DEGREE AND PG COURSES (AUTONOMOUS)</h1>
+                <p style="font-family:Roboto; font-size: 22px; color:#b92027; margin: 0px; font-weight: bold;text-align: left;">(Affiliated to Andhra University | Accredited by NAAC with 'A' Grade)</p>
+                <p style="font-family:Roboto; font-size: 22px; color:#b92027; margin: 0px; font-weight: bold;text-align: left;">(MBA and UG Engineering B.Tech(CE,CSE,ECE and ME) programs are Accredited by NBA)</p>
+                <p style="font-family:Roboto; font-size: 22px; color: black; margin: 0px; font-weight: bold;text-align: left;">Visakhapatnam - 530045.</p>
+            </div>
+        </div>
+       <h2>Select Your Boarding Points </h2>
+
+  <form id="busForm">
+    <div class="bus-stop-list" id="stopList"></div>
+    <button type="submit">Submit</button>
+    
+  </form>
+
+  <script>
+    const busStops = [
+      "GAJUWAKA","PENDURTHI JN","PENDURTHI POLICE STATION","CHINNAMUSIDIVADA","SUJATA NAGAR","PURSHOTA PURAM","KRISHNA RAYA PURAM","APPANNA PALEM","GOSLA JN",
+    "SIMHACHALAM JN","CHINNA GADILE JN","PEDDA GADILE JN","AUTONAGAR","B.H.P.V GATE","NATAYYA PALEM","SHEELA NAGAR","KAKANI NAGAR","R&B JN","PUNJAB HOTEL","BIRLA JN","MURALI NAGAR","5TH TOWN JN","URVASI JN","AKKAYYAPALEM","4TH TOWN JN","GURUDWARA JN","M.V.P(A.S RAJA)",
+  ];
+
+    const stopList = document.getElementById('stopList');
+
+    busStops.forEach(stop => {
+      const div = document.createElement('div');
+      div.className = 'bus-stop';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'busStop';
+      checkbox.value = stop;
+      checkbox.onclick = limitSelection;
+      checkbox.size = 100;
+
+      const label = document.createElement('label');
+      label.textContent = stop;
+
+      div.appendChild(checkbox);
+      div.appendChild(document.createElement('br'));
+      div.appendChild(label);
+
+      stopList.appendChild(div);
+    });
+
+    function limitSelection() {
+      const checked = document.querySelectorAll('input[name="busStop"]:checked');
+      if (checked.length > 1) {
+        alert("You can only select up to 1stop.");
+        this.checked = false;
+      }
+    }
+
+    document.getElementById('busForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const selected = Array.from(document.querySelectorAll('input[name="busStop"]:checked')).map(cb => cb.value);
+      
+      if (selected.length === 0) {
+        alert("Please select at least one stop.");
+        return;
+      }
+
+      localStorage.setItem('selectedStops', JSON.stringify(selected));
+      window.location.href = 'bus.html';
+    });
+  </script>
+</div>
+<a href="login.html">logout</a>
+
+
+
+</body>
+</html>
+

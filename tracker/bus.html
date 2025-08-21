@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BUS SELECTION</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e0ffe0;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    ul {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .bus-info {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .bus-info iframe {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .back-button {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .back-button a {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .back-button a:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>You selected the following stop:</h2>
+  <ul id="selectedList"></ul>
+
+  <div class="bus-info" id="busDetails"></div>
+
+  <div class="back-button">
+    <a href="homepage.html">Back</a>
+  </div>
+  <div style="text-align: center; margin-top: 20px;">
+  <button id="viewTrackerBtn" style="padding: 10px 20px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    View Live Bus Tracker
+  </button>
+</div>
+
+
+  <script>
+    const busStop = {
+      "GAJUWAKA": { busNo: "Bus 1", mapUrl: "https://www.google.com/maps/d/embed?mid=1j2Gw3FnN1LUpAznaYL2hsSdCXRJ9C9E&usp=sharing"},
+      "PENDURTHI JN": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing" },
+      "PENDURTHI POLICE STATION": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing" },
+      "CHINNAMUSIDIWADA": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing" },
+      "SUJATHA NAGAR": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing" },
+      "PURUSHOTA PURAM": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing"},
+      "KRISHANA RAYA PURAM": { busNo: "Bus 2",mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing"},
+      "APPANNA PALEM": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing"},
+      "GOSALA JN": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing"},
+      "SIMHACHALAM JN": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing"},
+      "CHINNA GADILE JN": { busNo: "Bus 2",  mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing"},
+      "PEDDA GADILE JN": { busNo: "Bus 2", mapUrl: "https://www.google.com/maps/d/embed?mid=1Wh5b9GIIj1wjvbrNoFVUE8EJ8M95eFg&usp=sharing"},
+      "AUTONAGAR": { busNo: "Bus 3", mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing"},
+      "B.H.P.V GATE": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "NATAYYA PALEM": { busNo: "Bus 3", mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing"  },
+      "SHEELA NAGAR": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "KAKANE NAGAR": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "R&B JN": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "PUNJAB HOTEL": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "BIRLA JN": { busNo: "Bus 3",   mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing"},
+      "MURALI NAGAR": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "5TH TOWN JN": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "URVASI JN": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "AKKAYYAPALEM": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "4TH TOWN JN": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "GURUDWARA JN": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" },
+      "M.V.P(A.S RAJA)": { busNo: "Bus 3",  mapUrl: "https://www.google.com/maps/d/embed?mid=1P7sbN_OXLCJiispIM32MF3U0szFUBOA&usp=sharing" }
+    };
+     
+  
+
+
+    const list = document.getElementById('selectedList');
+    const busDetails = document.getElementById('busDetails');
+    const stops = JSON.parse(localStorage.getItem('selectedStops')) || [];
+
+    if (stops.length === 0) {
+      list.innerHTML = '<li>No stops selected.</li>';
+    } else {
+      stops.forEach(stop => {
+        const li = document.createElement('li');
+        li.textContent = stop;
+        list.appendChild(li);
+
+        const info = busStop[stop];
+        if (info) {
+          busDetails.innerHTML = `
+            <h3>Bus Assigned: ${info.busNo}</h3>
+            <iframe src="${info.mapUrl}" width="640" height="480"></iframe>
+          `;
+        } else {
+          busDetails.innerHTML = `<p>No bus assigned for this stop.</p>`;
+        }
+      });
+    }
+    document.getElementById('viewTrackerBtn').addEventListener('click', () => {
+  // Redirect to the bus tracker page, e.g., 'bus-tracker.html'
+  window.location.href = 'studenttracker.html';
+});
+
+   
+
+
+  </script>
+
+</body>
+</html>

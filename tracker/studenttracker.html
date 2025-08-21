@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Tracker - All Buses</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdmsYz-UWLjHiY1BEvANdsxXvnLkXo3tw"></script>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; }
+    h2 { text-align: center; margin: 10px 0; }
+    #map { height: 90vh; width: 100%; }
+  </style>
+</head>
+<body>
+  <h2>Live Locations of All 4 Buses</h2>
+  <div id="map"></div>
+
+  <script>
+    // Your Firebase config - replace with your values
+    var firebaseConfig = {
+      apiKey: "AIzaSyDBWqae2v-k_TmI6uf-WUA17_wxzQPwhFM",
+  authDomain: "tracker-55d89.firebaseapp.com",
+  projectId: "tracker-55d89",
+  storageBucket: "tracker-55d89.firebasestorage.app",
+  messagingSenderId: "662247189575",
+  appId: "1:662247189575:web:450cdbe95de83ef7445562",
+  measurementId: "G-DX7QC70DPT"
+
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Initialize Google Map
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 17.7, lng: 83.3 }, // center of your area
+      zoom: 12
+    });
+
+    // Bus identifiers to track
+    var busIDs = ['bus1', 'bus2', 'bus3', 'bus4'];
+
+    // Create marker objects for each bus
+    var markers = {};
+
+    busIDs.forEach(function(busId) {
+      // Initialize marker off-map
+      markers[busId] = new google.maps.Marker({
+        position: { lat: 0, lng: 0 },
+        map: map,
+        title: busId,
+        label: busId.replace('bus', 'Bus ')
+      });
+    });
+
+    // Listen for location updates and update markers
+    busIDs.forEach(function(busId) {
+      firebase.database().ref('buses/' + busId).on('value', function(snapshot) {
+        var data = snapshot.val();
+        if (data && data.lat && data.lng) {
+          var latLng = { lat: data.lat, lng: data.lng };
+          markers[busId].setPosition(latLng);
+          // Optionally, adjust the map center to bus1's location only once when available
+          if (busId === 'bus1') {
+            map.setCenter(latLng);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
